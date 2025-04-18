@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>todo list</title>
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="css/fontello.css" />
+    <link rel="stylesheet" href="css/profile-styles.css" />
+    <link rel="stylesheet" href="css/output.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  </head>
+  <body class="font-montserat">
+    <main
+      class="bg-todoback w-screen h-screen flex justify-center items-center">
+      <!-- todo box -->
+      <div
+        class="content relative rounded-[5px] bg-[#fffffe] shadow-md shadow-slate-300/35">
+        <!-- todobox -->
+        <div
+          class="todobox relative overflow-hidden w-[400px] rounded-t-[5px] rounded-r-[5px]">
+          <header class="row bg-[#f0f0fa] p-5 border-b border-b-slate-200">
+            <div class="date-content w-2/3">
+              <h2 class="*:text-xl *:text-dateColor *:font-semibold">
+                <span class="week-day capitalize">tuesday,</span>
+                <span class="month-day">31</span>
+              </h2>
+              <h4 class="month-name capitalize text-taskColor">august</h4>
+            </div>
+            <div
+              class="tasks *:inline-block *:px-[2px] w-1/3 capitalize flex justify-center text-taskColor">
+              <span class="task-number text-[#bebec0] font-bold">0</span>
+              <span>tasks</span>
+            </div>
+          </header>
+
+          <!-- todo list -->
+          <ul
+            class="list relative my-3 min-h-[50vh] max-h-[50vh] overflow-auto p-2 overflow-x-hidden">
+            <p
+              class="message text-taskColor absolute left-1/2 -translate-x-1/2 top-1/3 -translate-y-1/2">
+              there is nothing to do 😊
+            </p>
+          </ul>
+
+          <!-- end todobox -->
+        </div>
+
+        <!-- modal Backdrop -->
+        <div
+          class="modal-backdrop absolute hidden justify-center items-center inset-0 bg-slate-700/50 rounded-[5px]">
+          <!-- modal -->
+          <div
+            class="modal transform translate-y-[50px] w-3/4 bg-[#fffffe] rounded-[5px] p-7 pb-3 transition duration-400 opacity-0">
+            <h3 class="capitalize mb-2 font-semibold text-slate-400">
+              add task
+            </h3>
+            <input
+              type="text"
+              class="input rounded-md p-2 border border-slate-300 mb-1 placeholder:text-sm"
+              placeholder="Add a Task here" />
+            <div class="flex justify-end">
+              <button
+                class="save-button inline-block text-md transition bg-greenbtn py-1 px-2 text-slate-200 rounded-xl font-semibold cursor-pointer hover:bg-green-700">
+                save
+              </button>
+            </div>
+            <p class="text-center font-montserat text-xs pt-1">
+              click Save or Press Enter
+            </p>
+          </div>
+        </div>
+
+        <!-- icons -->
+        <div
+          class="relative iconbox addtolist flex transform justify-center items-center">
+          <span
+            class="material-symbols-outlined add bg-greenbtn text-white rounded-full hover:shadow-[0_0_20px_1px] hover:shadow-greenbtn transition duration-[280] p-3">
+            add
+          </span>
+          <span
+            class="material-symbols-outlined close hide bg-red-500/80 text-white p-3 rounded-full hover:shadow-[0_0_20px_1px] hover:shadow-red-500">
+            close
+          </span>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
