@@ -4,7 +4,7 @@
 
 ![Image](https://github.com/user-attachments/assets/fcf35e7e-892e-4767-be0f-b1a5ff9b1e70)
 
-<p>your list would be stored in localStorage of your browser.so every time you back, you can see your list.😊</p>
+<p>"Your list will be stored in your browser's localStorage, so you can see it every time you come back." 😊</p>
 
 <p align="center"><a href="https://mohamadmokarram.github.io/todolist/">Demo Project</a></p>
 
