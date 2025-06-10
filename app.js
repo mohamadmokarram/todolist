@@ -8,6 +8,68 @@ const list = document.querySelector(".list");
 const message = document.querySelector(".message");
 const audio = new Audio("./audio/MyRingtone.IR_1583566199_7677.mp3");
 
+//to save in localStorage
+let todoList = [];
+
+function storeLocalStorage() {
+  //get todolist and save it to localStorage
+  const jsonList = JSON.stringify(todoList);
+  localStorage.setItem("todoList", jsonList);
+}
+
+function deleteFromLocalStorage(listItem) {
+  const listItemText = listItem.querySelector("h2").innerText;
+  //get todolist
+  let parsedList = JSON.parse(localStorage.getItem("todoList"));
+  //remove from localStorage
+  parsedList = parsedList.filter(text => text !== listItemText);
+  //and also remove from todolist
+  todoList = todoList.filter(txt => txt !== listItemText);
+  //store again
+  storeLocalStorage();
+}
+
+function deleteHandler(listItem) {
+  let tasks = document.querySelector(".task-number");
+
+  // deleting list item process
+  const doneBtn = listItem.querySelector("span");
+  //when span clicks
+  doneBtn.addEventListener("click", function () {
+    this.classList.add(
+      "transition",
+      "duration-500",
+      "text-white",
+      "bg-greenbtn"
+    );
+    audio.currentTime = 0;
+    //play audio
+    audio.play();
+
+    setTimeout(() => {
+      let listItem = this.parentElement;
+      listItem.classList.add("opacity-0");
+
+      listItem.addEventListener(
+        "transitionend",
+        function () {
+          //first remove from localStorage
+          deleteFromLocalStorage(listItem);
+          //then remove from UI
+          this.remove();
+          let taskNumbers = getTotalListItems();
+          tasks.innerHTML = taskNumbers;
+          if (taskNumbers === 0) {
+            message.classList.toggle("hidden");
+          }
+        },
+        { once: true }
+      );
+    }, 500);
+  });
+}
+
+//to show number of tasks
 function getTotalListItems() {
   let items = document.querySelectorAll("ul.list>li");
   return items.length;
@@ -58,7 +120,7 @@ function changeIcon(event) {
   }
 }
 
-//  save task
+//  save task on UI & localStorage
 function saveTask() {
   let inputValue;
   if (input.value !== "") {
@@ -69,7 +131,13 @@ function saveTask() {
     return;
   }
 
+  //adding to todoList array but first stringify it
+  //you can not store li in localStorage
+  todoList.push(input.value);
+
+  //create li
   let listItem = document.createElement("li");
+  //adding tailwind calsses to li
   listItem.className = "listItem -translate-y-12 opacity-0";
   let listContent = `
     <h2>${inputValue}</h2>
@@ -77,10 +145,15 @@ function saveTask() {
   `;
   listItem.innerHTML = listContent;
 
+  //closing modal window
   closeModal();
+  //changing icon at the bottom
   changeIcon(event);
 
+  //add to Ui list
   list.prepend(listItem);
+
+  storeLocalStorage();
   input.value = "";
 
   setTimeout(() => {
@@ -98,36 +171,7 @@ function saveTask() {
 
   tasks.innerHTML = taskNumbers;
 
-  // deleting list item
-  const doneBtn = listItem.querySelector("span");
-  doneBtn.addEventListener("click", function () {
-    this.classList.add(
-      "transition",
-      "duration-500",
-      "text-white",
-      "bg-greenbtn"
-    );
-    audio.currentTime = 0;
-    audio.play();
-
-    setTimeout(() => {
-      let listItem = this.parentElement;
-      listItem.classList.add("opacity-0");
-
-      listItem.addEventListener(
-        "transitionend",
-        function () {
-          this.remove();
-          let taskNumbers = getTotalListItems();
-          tasks.innerHTML = taskNumbers;
-          if (taskNumbers === 0) {
-            message.classList.toggle("hidden");
-          }
-        },
-        { once: true }
-      );
-    }, 500);
-  });
+  deleteHandler(listItem);
 }
 
 function deleteTask() {}
@@ -144,7 +188,7 @@ modalBackdrop.addEventListener("click", e => {
 
   if (isModalBackdrop) {
     closeModal();
-    changeIcon(event);
+    changeIcon(e);
   }
 
   input.value = "";
@@ -201,5 +245,32 @@ input.addEventListener("keypress", e => {
   if (e.key === "Enter") {
     saveTask();
     e.target.value = "";
+  }
+});
+
+//get todolist on first load and if it's not empty make li tags
+window.addEventListener("load", () => {
+  //get list
+  const storedList = JSON.parse(localStorage.getItem("todoList"));
+
+  if (storedList.length > 0) {
+    let tasks = document.querySelector(".task-number");
+    message.classList.add("hidden");
+    todoList = storedList;
+
+    //making list items and prepend it to ul
+    storedList.forEach(txt => {
+      //create li
+      const li = document.createElement("li");
+      li.className = "listItem";
+      li.innerHTML = `
+        <h2>${txt}</h2>
+        <span class="material-symbols-outlined checked"> check </span>`;
+      list.appendChild(li);
+      deleteHandler(li);
+    });
+
+    let totalTasks = getTotalListItems();
+    tasks.innerHTML = totalTasks;
   }
 });
